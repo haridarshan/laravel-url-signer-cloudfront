@@ -25,7 +25,7 @@ class CloudFrontUrlSigner
      * Get a secure URL to a controller action.
      *
      * @param string $url
-     * @param int|null $expiration
+     * @param int|null $expiration (in seconds)
      * @param string|null $policy
      *
      * @return string
@@ -45,7 +45,7 @@ class CloudFrontUrlSigner
      * Create a signed Amazon CloudFront cookie.
      *
      * @param string|null $url
-     * @param int|null $expiration
+     * @param int|null $expiration (in seconds)
      * @param string|null $policy
      *
      * @return array
