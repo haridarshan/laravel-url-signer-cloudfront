@@ -1,5 +1,6 @@
 # Laravel CloudFront Url Signer
-Wrapper around the official AWS PHP SDK to generate CloudFront signed URLs
+This a simple wrapper around the official AWS PHP Laravel SDK to generate CloudFront signed URLs
+
 
 # Installation
 The package can be installed via Composer:

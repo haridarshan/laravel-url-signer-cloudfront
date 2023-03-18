@@ -66,7 +66,7 @@ class CloudFrontUrlSigner
      */
     public function signedUrl(
         string $url,
-        DateTimeInterface|int $expiry = null,
+        $expiry = null,
         string $policy = null
     ): string {
         return $this->client->getSignedUrl([
@@ -88,7 +88,7 @@ class CloudFrontUrlSigner
      *
      * @return int
      */
-    protected function getTimestamp(DateTimeInterface|int $expiry): int
+    protected function getTimestamp($expiry): int
     {
         if (is_int($expiry)) {
             return time() + $expiry;
@@ -137,7 +137,7 @@ class CloudFrontUrlSigner
      */
     public function signedCookie(
         string $url = null,
-        DateTimeInterface|int $expiry = null,
+        $expiry = null,
         string $policy = null
     ): array {
         return $this->client->getSignedCookie([
