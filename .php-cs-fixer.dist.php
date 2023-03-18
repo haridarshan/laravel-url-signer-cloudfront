@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 use PhpCsFixer\Config;
 use PhpCsFixer\Finder;
@@ -15,10 +16,9 @@ $finder = Finder::create()
         'vendor'
     ])
     ->ignoreDotFiles(true)
-    ->ignoreVCS(true);
+    ->ignoreVCSIgnored(true);
 
 return (new Config())
-    ->setFinder($finder)
-    ->setRules($rules)
     ->setRiskyAllowed(true)
-    ->setUsingCache(true);
+    ->setRules($rules)
+    ->setFinder($finder);
