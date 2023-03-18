@@ -141,18 +141,18 @@ class CloudFrontUrlSigner
         $expiry = null,
         string $policy = null
     ): array {
-return $this->client->getSignedCookie([
-    'url'         => $url,
-    'expires'     => $this->getTimestamp(
-        $expiry ?? config(
-            'cloudfront-url-signer.default_expiration_time_in_seconds',
-            60 * 60 * 24
-        )
-    ),
-    'private_key' => $this->privateKeyPath,
-    'key_pair_id' => $this->keyPairId,
-    'policy'      => $policy
-]);
+        return $this->client->getSignedCookie([
+            'url'         => $url,
+            'expires'     => $this->getTimestamp(
+                $expiry ?? config(
+                    'cloudfront-url-signer.default_expiration_time_in_seconds',
+                    60 * 60 * 24
+                )
+            ),
+            'private_key' => $this->privateKeyPath,
+            'key_pair_id' => $this->keyPairId,
+            'policy'      => $policy
+        ]);
     }
 
     /**
