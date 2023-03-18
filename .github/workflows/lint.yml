@@ -8,28 +8,34 @@ jobs:
   main:
     runs-on: ubuntu-latest
 
+    continue-on-error: ${{ matrix.experimental }}
     strategy:
-      fail-fast: true
       matrix:
         include:
           - php-version: '7.2'
             php-cs-fixer: '3.2'
             psalm: '4.0'
+            experimental: true
           - php-version: '7.3'
             php-cs-fixer: '3.2'
             psalm: '4.0'
+            experimental: true
           - php-version: '7.4'
             php-cs-fixer: '3.5'
             psalm: '5.0'
+            experimental: true
           - php-version: '8.0'
             php-cs-fixer: '3.5'
             psalm: '5.0'
+            experimental: true
           - php-version: '8.1'
             php-cs-fixer: '3.5'
             psalm: '5.0'
+            experimental: true
           - php-version: '8.2'
             php-cs-fixer: '3.5'
             psalm: '5.0'
+            experimental: true
 
     name: PHP ${{ matrix.php-version }}
     steps:
