@@ -56,9 +56,7 @@ jobs:
         run: vendor/bin/phpunit
 
       - name: Remove Laravel
-        run: |
-          composer remove laravel/framework
-          rm composer.lock
+        run: rm -rf composer.lock vendor
 
       - name: Run test suite
         run: vendor/bin/phpunit

@@ -30,6 +30,68 @@ class CloudFrontServiceProviderTest extends BaseTestCase
     /**
      * @test
      */
+    public function testRegisterAwsServiceProviderWithPackageConfigAndEnv()
+    {
+        $app = $this->setupApplication();
+        $this->setupServiceProvider($app);
+
+        // Get an instance of a client (CloudFrontClient).
+        $cloudFrontClient = $app['cloudfront']->getClient();
+        $this->assertInstanceOf('Aws\CloudFront\CloudFrontClient', $cloudFrontClient);
+
+        // Verify that the client received the credentials from the package config.
+        $credentials = $cloudFrontClient->getCredentials()->wait();
+
+        $this->assertEquals('foo', $credentials->getAccessKeyId());
+        $this->assertEquals('bar', $credentials->getSecretKey());
+        $this->assertEquals('baz', $cloudFrontClient->getRegion());
+    }
+
+    /**
+     * @test
+     */
+    public function testPrivateKeyPath()
+    {
+        $app = $this->setupApplication();
+        $this->setupServiceProvider($app);
+        $config = $app['config']->get('cloudfront');
+
+        $this->assertArrayHasKey('private_key_path', $config);
+        $this->assertArrayHasKey('key_pair_id', $config);
+
+        $expectedPrivateKeyPath = get_base_path('tests/test-key.pem');
+
+        $this->assertFileEquals($expectedPrivateKeyPath, $config['private_key_path']);
+        $this->assertEquals('testKeyPairId', $config['key_pair_id']);
+    }
+
+    /**
+     * @test
+     */
+    public function testCloudFrontServiceInstance()
+    {
+        $app = $this->setupApplication();
+        $this->setupServiceProvider($app);
+
+        $this->assertInstanceOf(CloudFront::class, $app['cloudfront']);
+    }
+
+    /**
+     * @test
+     */
+    public function testServiceNameIsProvided()
+    {
+        $app = $this->setupApplication();
+        $provider = $this->setupServiceProvider($app);
+        $this->assertContains('cloudfront', $provider->provides());
+        $expectArray = ['cloudfront', CloudFront::class];
+
+        $this->assertEquals($expectArray, $provider->provides());
+    }
+
+    /**
+     * @test
+     */
     public function testCloudFrontSignedUrl()
     {
         $app = $this->setupApplication();
@@ -154,68 +216,6 @@ POLICY;
     }
 
     /**
-     * @test
-     */
-    public function testRegisterAwsServiceProviderWithPackageConfigAndEnv()
-    {
-        $app = $this->setupApplication();
-        $this->setupServiceProvider($app);
-
-        // Get an instance of a client (CloudFrontClient).
-        $cloudFrontClient = $app['cloudfront']->getClient();
-        $this->assertInstanceOf('Aws\CloudFront\CloudFrontClient', $cloudFrontClient);
-
-        // Verify that the client received the credentials from the package config.
-        $credentials = $cloudFrontClient->getCredentials()->wait();
-
-        $this->assertEquals('foo', $credentials->getAccessKeyId());
-        $this->assertEquals('bar', $credentials->getSecretKey());
-        $this->assertEquals('baz', $cloudFrontClient->getRegion());
-    }
-
-    /**
-     * @test
-     */
-    public function testPrivateKeyPath()
-    {
-        $app = $this->setupApplication();
-        $this->setupServiceProvider($app);
-        $config = $app['config']->get('cloudfront');
-
-        $this->assertArrayHasKey('private_key_path', $config);
-        $this->assertArrayHasKey('key_pair_id', $config);
-
-        $expectedPrivateKeyPath = get_base_path('/test-key.pem');
-
-        $this->assertFileEquals($expectedPrivateKeyPath, $config['private_key_path']);
-        $this->assertEquals('testKeyPairId', $config['key_pair_id']);
-    }
-
-    /**
-     * @test
-     */
-    public function testCloudFrontServiceInstance()
-    {
-        $app = $this->setupApplication();
-        $this->setupServiceProvider($app);
-
-        $this->assertInstanceOf(CloudFront::class, $app['cloudfront']);
-    }
-
-    /**
-     * @test
-     */
-    public function testServiceNameIsProvided()
-    {
-        $app = $this->setupApplication();
-        $provider = $this->setupServiceProvider($app);
-        $this->assertContains('cloudfront', $provider->provides());
-        $expectArray = ['cloudfront', CloudFront::class];
-
-        $this->assertEquals($expectArray, $provider->provides());
-    }
-
-    /**
      * @return Application
      */
     protected function setupApplication()
@@ -225,7 +225,7 @@ POLICY;
         }
         // Create the application such that the config is loaded.
         $app = new Application();
-        $app->setBasePath(__DIR__);
+        $app->setBasePath(dirname(__DIR__));
         $app->instance('config', new Repository());
 
         return $app;
