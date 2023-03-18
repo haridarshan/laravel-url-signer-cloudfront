@@ -49,14 +49,16 @@ jobs:
       - name: Checkout codebase
         uses: actions/checkout@v3
 
-      - name: Install Composer deps
-        run: composer install
+      - name: Require laravel
+        run: composer require laravel/framework:${{ matrix.laravel-versions }} --no-interaction --prefer-dist --no-plugins
 
       - name: Run test suite without Laravel
         run: vendor/bin/phpunit
 
-      - name: Require laravel
-        run: composer require laravel/framework:${{ matrix.laravel-versions }} --no-interaction --prefer-dist --no-plugins
+      - name: Remove Laravel
+        run: |
+          composer remove laravel/framework
+          rm composer.lock
 
       - name: Run test suite
         run: vendor/bin/phpunit
