@@ -1,0 +1,54 @@
+name: Lint PR
+
+on:
+  pull_request_target:
+    types:
+      - opened
+      - edited
+      - synchronize
+
+jobs:
+  main:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        php-versions: [
+          '7.2',
+          '7.3',
+          '7.4',
+          '8.0',
+          '8.1',
+          '8.2'
+        ]
+
+    name: PHP ${{ matrix.php-versions }}
+    steps:
+      - name: Code Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+
+      - name: Setup php
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+          ini-values: opcache.enable_cli=1, opcache.jit=tracing, opcache.jit_buffer_size=64M
+          tools: php-cs-fixer, vimeo/psalm, phpunit
+
+      - name: Check Php code style
+        run: php-cs-fixer fix
+
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          branch: ${{ inputs.branch }}
+          commit_message: ${{ inputs.commit_message }}
+          commit_options: ${{ inputs.commit_options }}
+          push_options: ${{ inputs.push_options }}
+          file_pattern: ${{ inputs.file_pattern }}
+          commit_user_name: ${{ steps.import-gpg.outputs.name }}
+          commit_user_email: ${{ steps.import-gpg.outputs.email }}
+
+      - name: Run Psalm Static Analysis
+        run: psalm --output-format=github

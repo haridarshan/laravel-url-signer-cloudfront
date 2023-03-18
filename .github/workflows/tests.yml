@@ -1,0 +1,66 @@
+name: PHP Composer
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  run:
+    runs-on: ubuntu-22.04
+    strategy:
+      matrix:
+        include:
+          - php-versions: '7.2'
+            laravel-versions: '^6.0'
+          - php-versions: '7.2'
+            laravel-versions: '^7.0'
+          - php-versions: '7.3'
+            laravel-versions: '^6.0'
+          - php-versions: '7.3'
+            laravel-versions: '^7.0'
+          - php-versions: '7.3'
+            laravel-versions: '^8.0'
+          - php-versions: '7.4'
+            laravel-versions: '^6.0'
+          - php-versions: '7.4'
+            laravel-versions: '^7.0'
+          - php-versions: '7.4'
+            laravel-versions: '^8.0'
+          - php-versions: '8.0'
+            laravel-versions: '^7.0'
+          - php-versions: '8.0'
+            laravel-versions: '^8.0'
+          - php-versions: '8.0'
+            laravel-versions: '^9.0'
+          - php-versions: '8.1'
+            laravel-versions: '^8.0'
+          - php-versions: '8.1'
+            laravel-versions: '^9.0'
+          - php-versions: '8.1'
+            laravel-versions: '^10.0'
+          - php-versions: '8.2'
+            laravel-versions: '^9.0'
+          - php-versions: '8.2'
+            laravel-versions: '^10.0'
+
+    name: PHP ${{ matrix.php-versions }} with Laravel ${{ matrix.laravel-versions }}
+    env:
+      AWS_ACCESS_KEY_ID: test
+      AWS_SECRET_ACCESS_KEY: test
+    steps:
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+          ini-values: memory_limit=4G, phar.readonly=false
+
+      - name: Checkout codebase
+        uses: actions/checkout@v3
+
+      - name: Require laravel
+        run: composer require laravel/framework:${{ matrix.laravel-versions }} --no-interaction --prefer-dist --no-plugins
+
+      - name: Run test suite
+        run: vendor/bin/phpunit
