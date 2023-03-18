@@ -31,7 +31,7 @@ if (! function_exists('get_base_path')) {
         if (function_exists('base_path')) {
             return base_path($path);
         } else {
-            return dirname(__DIR__, 1) . ($path != '' ? DIRECTORY_SEPARATOR . ltrim($path, DIRECTORY_SEPARATOR) : '');
+            return dirname(__DIR__, 4) . ($path != '' ? DIRECTORY_SEPARATOR . ltrim($path, DIRECTORY_SEPARATOR) : '');
         }
     }
 }
