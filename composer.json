@@ -1,8 +1,8 @@
 {
-  "name": "haridarshan/laravel-cloudfront-url-signer",
+  "name": "haridarshan/laravel-url-signer-cloudfront",
   "description": "Wrapper around the official AWS PHP SDK to generate CloudFront signed URLs",
   "keywords": [
-    "laravel-cloudfront-url-signer",
+    "laravel-url-signer-cloudfront",
     "private content",
     "cloudfront",
     "aws",
@@ -28,26 +28,29 @@
   },
   "require-dev": {
     "friendsofphp/php-cs-fixer": "^3.4",
-    "vimeo/psalm": "^5.0",
-    "phpunit/phpunit": "^9.5 || ^10.0"
+    "phpunit/phpunit": "^9.5 || ^10.0",
+    "vimeo/psalm": "^5.0"
   },
   "autoload": {
     "psr-4": {
-      "Haridarshan\\Laravel\\CloudFrontUrlSigner\\": "src/"
+      "Haridarshan\\Laravel\\UrlSigner\\AwsCloudFront\\": "src/"
     },
     "files": [
       "src/functions.php"
     ]
   },
+  "autoload-dev": {
+    "psr-4": { "Haridarshan\\Laravel\\UrlSigner\\AwsCloudFront\\Tests\\": "tests/"}
+  },
   "extra": {
     "laravel": {
       "providers": [
         "Aws\\Laravel\\AwsServiceProvider",
-        "Haridarshan\\Laravel\\CloudFrontUrlSigner\\CloudFrontUrlSignerServiceProvider"
+        "Haridarshan\\Laravel\\UrlSigner\\AwsCloudFront\\CloudFrontServiceProvider"
       ],
       "aliases": {
         "AWS": "Aws\\Laravel\\AwsFacade",
-        "CloudFrontUrlSigner": "Haridarshan\\Laravel\\CloudFrontUrlSigner\\Facades\\CloudFrontUrlSignerFacade"
+        "CloudFrontUrlSigner": "Haridarshan\\Laravel\\UrlSigner\\AwsCloudFront\\Facades\\CloudFrontFacade"
       }
     }
   },

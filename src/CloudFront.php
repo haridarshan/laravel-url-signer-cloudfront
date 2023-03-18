@@ -1,13 +1,13 @@
 <?php
 
-namespace Haridarshan\Laravel\CloudFrontUrlSigner;
+namespace Haridarshan\Laravel\UrlSigner\AwsCloudFront;
 
 use Aws\AwsClientInterface;
 use DateTime;
 use DateTimeInterface;
 use InvalidArgumentException;
 
-class CloudFrontUrlSigner
+class CloudFront
 {
     /**
      * Aws CloudFront Client
@@ -74,7 +74,7 @@ class CloudFrontUrlSigner
             'url'         => $url,
             'expires'     => $this->getTimestamp(
                 $expiry ?? get_config(
-                    'cloudfront-url-signer.default_expiration_time_in_seconds',
+                    'cloudfront.default_expiration_time_in_seconds',
                     60 * 60 * 24
                 )
             ),
@@ -145,7 +145,7 @@ class CloudFrontUrlSigner
             'url'         => $url,
             'expires'     => $this->getTimestamp(
                 $expiry ?? get_config(
-                    'cloudfront-url-signer.default_expiration_time_in_seconds',
+                    'cloudfront.default_expiration_time_in_seconds',
                     60 * 60 * 24
                 )
             ),

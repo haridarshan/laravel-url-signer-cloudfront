@@ -82,3 +82,17 @@ if (! function_exists('get_config')) {
         }
     }
 }
+
+if (! function_exists('print_data')) {
+    /**
+     * @param mixed $data
+     */
+    function print_data(...$data): void
+    {
+        foreach ($data as $obj) {
+            echo "<pre>";
+            print_r($obj);
+            echo "</pre>\n";
+        }
+    }
+}

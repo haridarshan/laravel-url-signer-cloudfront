@@ -1,6 +1,6 @@
 <?php
 
-namespace Haridarshan\Laravel\CloudFrontUrlSigner\Facades;
+namespace Haridarshan\Laravel\UrlSigner\AwsCloudFront\Facades;
 
 use Aws\AwsClientInterface;
 use DateTimeInterface;
@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static array signedCookie(string $url = null, DateTimeInterface|int $expiry = null, string $policy = null) Create a signed Amazon CloudFront cookie.
  * @method static AwsClientInterface getClient() Get CloudFront client
  */
-class CloudFrontUrlSignerFacade extends Facade
+class CloudFrontFacade extends Facade
 {
     /**
      * Get the registered name of the component.
@@ -22,6 +22,6 @@ class CloudFrontUrlSignerFacade extends Facade
      */
     protected static function getFacadeAccessor(): string
     {
-        return 'cloudfront-url-signer';
+        return 'cloudfront';
     }
 }
