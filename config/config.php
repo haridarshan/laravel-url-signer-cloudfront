@@ -19,7 +19,7 @@ return [
     | The private key used to sign CloudFront URLs.
     |
     */
-    'private_key_path' => base_path(env('CLOUDFRONT_PRIVATE_KEY_PATH', '')),
+    'private_key_path' => get_base_path(env('CLOUDFRONT_PRIVATE_KEY_PATH', '')),
 
     /*
     |--------------------------------------------------------------------------

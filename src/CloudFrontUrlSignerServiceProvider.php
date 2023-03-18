@@ -2,7 +2,6 @@
 
 namespace Haridarshan\Laravel\CloudFrontUrlSigner;
 
-use Aws\CloudFront\CloudFrontClient;
 use Aws\Laravel\AwsServiceProvider;
 use Aws\Laravel\AwsFacade;
 use RuntimeException;
@@ -24,7 +23,7 @@ class CloudFrontUrlSignerServiceProvider extends AwsServiceProvider
         parent::boot();
 
         $this->publishes([
-            __DIR__ . '/../config/config.php' => config_path('cloudfront-url-signer.php'),
+            __DIR__ . '/../config/config.php' => get_config_path('cloudfront-url-signer.php'),
         ], 'config');
     }
 
@@ -37,18 +36,18 @@ class CloudFrontUrlSignerServiceProvider extends AwsServiceProvider
 
         $this->mergeConfigFrom(__DIR__ . '/../config/config.php', 'cloudfront-url-signer');
 
-        $this->app->singleton('cloudfront-url-signer', function ($app) {
-            if (config('cloudfront-url-signer.key_pair_id') === '') {
+        $this->app->singleton('cloudfront-url-signer', function () {
+            if (get_config('cloudfront-url-signer.key_pair_id') === '') {
                 throw new RuntimeException('Key pair id cannot be empty');
             }
 
-            if (config('cloudfront-url-signer.private_key_path') === '') {
+            if (get_config('cloudfront-url-signer.private_key_path') === '') {
                 throw new RuntimeException('private key path cannot be empty');
             }
 
             return new CloudFrontUrlSigner(
-                new CloudFrontClient(config('aws')),
-                config('cloudfront-url-signer')
+                AwsFacade::createClient('cloudfront'),
+                get_config('cloudfront-url-signer')
             );
         });
 

@@ -73,7 +73,7 @@ class CloudFrontUrlSigner
         return $this->client->getSignedUrl([
             'url'         => $url,
             'expires'     => $this->getTimestamp(
-                $expiry ?? config(
+                $expiry ?? get_config(
                     'cloudfront-url-signer.default_expiration_time_in_seconds',
                     60 * 60 * 24
                 )
@@ -144,7 +144,7 @@ class CloudFrontUrlSigner
         return $this->client->getSignedCookie([
             'url'         => $url,
             'expires'     => $this->getTimestamp(
-                $expiry ?? config(
+                $expiry ?? get_config(
                     'cloudfront-url-signer.default_expiration_time_in_seconds',
                     60 * 60 * 24
                 )
