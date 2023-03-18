@@ -31,11 +31,13 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-versions }}
-          ini-values: opcache.enable_cli=1, opcache.jit=tracing, opcache.jit_buffer_size=64M
-          tools: php-cs-fixer, vimeo/psalm, phpunit
+          # tools: php-cs-fixer, vimeo/psalm
+
+      - name: Install composer
+        run: composer install
 
       - name: Check Php code style
-        run: php-cs-fixer fix
+        run: ./vendor/bin/php-cs-fixer fix
 
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
@@ -48,4 +50,4 @@ jobs:
           commit_user_email: ${{ steps.import-gpg.outputs.email }}
 
       - name: Run Psalm Static Analysis
-        run: psalm --output-format=github
+        run: ./vendor/bin/psalm --output-format=github
