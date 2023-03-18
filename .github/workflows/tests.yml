@@ -8,20 +8,10 @@ on:
 
 jobs:
   run:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         include:
-          - php-versions: '7.2'
-            laravel-versions: '^6.0'
-          - php-versions: '7.2'
-            laravel-versions: '^7.0'
-          - php-versions: '7.3'
-            laravel-versions: '^6.0'
-          - php-versions: '7.3'
-            laravel-versions: '^7.0'
-          - php-versions: '7.3'
-            laravel-versions: '^8.0'
           - php-versions: '7.4'
             laravel-versions: '^6.0'
           - php-versions: '7.4'
@@ -55,6 +45,7 @@ jobs:
         with:
           php-version: ${{ matrix.php-versions }}
           ini-values: memory_limit=4G, phar.readonly=false
+          tools: phpunit
 
       - name: Checkout codebase
         uses: actions/checkout@v3
@@ -63,4 +54,4 @@ jobs:
         run: composer require laravel/framework:${{ matrix.laravel-versions }} --no-interaction --prefer-dist --no-plugins
 
       - name: Run test suite
-        run: vendor/bin/phpunit
+        run: phpunit
