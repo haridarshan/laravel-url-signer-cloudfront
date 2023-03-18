@@ -21,8 +21,9 @@ class CloudFrontUrlSigner
     private string $keyPairId;
 
     /**
-     * Constructor Accepts following arguments:
+     * CloudFrontUrlSigner Constructor.
      *
+     * Accepts arguments:
      * - client: (AwsClientInterface)  CloudFrontClient
      * - options: (array)
      *       - private_key_path: (string) Path of Trusted Key Group Private Key
