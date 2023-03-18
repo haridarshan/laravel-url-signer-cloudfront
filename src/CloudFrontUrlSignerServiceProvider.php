@@ -46,7 +46,10 @@ class CloudFrontUrlSignerServiceProvider extends AwsServiceProvider
                 throw new RuntimeException('private key path cannot be empty');
             }
 
-            return new CloudFrontUrlSigner(new CloudFrontClient(config('aws')));
+            return new CloudFrontUrlSigner(
+                new CloudFrontClient(config('aws')),
+                config('cloudfront-url-signer')
+            );
         });
 
         $this->app->alias('cloudfront-url-signer', CloudFrontUrlSigner::class);
