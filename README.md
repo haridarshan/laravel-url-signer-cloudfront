@@ -162,7 +162,7 @@ Dotenv::create(
     '.env'
 )->safeLoad();
 
-$cloudfront = new \Haridarshan\Laravel\UrlSigner\CloudFront(
+$cloudfront = new \Haridarshan\Laravel\UrlSigner\AwsCloudFront\CloudFront(
     (new Sdk([
         'credentials' => [
             'key'    => env('AWS_ACCESS_KEY_ID', ''),
