@@ -12,13 +12,13 @@ $rules = [
 
 $finder = Finder::create()
     ->in(__DIR__)
-    ->exclude([
-        'vendor'
-    ])
+    ->exclude('vendor')
+    ->name('*.php')
     ->ignoreDotFiles(true)
-    ->ignoreVCSIgnored(true);
+    ->ignoreVCSIgnored(true)
+    ->ignoreVCS(true);
 
 return (new Config())
-    ->setRiskyAllowed(true)
+    ->setFinder($finder)
     ->setRules($rules)
-    ->setFinder($finder);
+    ->setRiskyAllowed(true);
