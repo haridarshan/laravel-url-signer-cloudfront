@@ -36,13 +36,9 @@ jobs:
 
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          branch: ${{ inputs.branch }}
-          commit_message: ${{ inputs.commit_message }}
-          commit_options: ${{ inputs.commit_options }}
-          push_options: ${{ inputs.push_options }}
-          file_pattern: ${{ inputs.file_pattern }}
-          commit_user_name: ${{ steps.import-gpg.outputs.name }}
-          commit_user_email: ${{ steps.import-gpg.outputs.email }}
+          push_options: '--force'
+          file_pattern: '*.php'
+          branch: ${{ github.event.pull_request.head.ref }}
 
       - name: Run Psalm Static Analysis
         run: psalm --output-format=github
