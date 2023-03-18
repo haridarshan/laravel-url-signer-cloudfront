@@ -10,16 +10,21 @@ jobs:
 
     strategy:
       matrix:
-        php-versions: [
-          '7.2',
-          '7.3',
-          '7.4',
-          '8.0',
-          '8.1',
-          '8.2'
-        ]
+        include:
+          - php-version: '7.2'
+            php-cs-fixer: '^3.2'
+          - php-version: '7.3'
+            php-cs-fixer: '^3.2'
+          - php-version: '7.4'
+            php-cs-fixer: '^3.5'
+          - php-version: '8.0'
+            php-cs-fixer: '^3.5'
+          - php-version: '8.1'
+            php-cs-fixer: '^3.5'
+          - php-version: '8.2'
+            php-cs-fixer: '^3.5'
 
-    name: PHP ${{ matrix.php-versions }}
+    name: PHP ${{ matrix.php-version }}
     steps:
       - name: Code Checkout
         uses: actions/checkout@v3
@@ -30,8 +35,8 @@ jobs:
       - name: Setup php
         uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ matrix.php-versions }}
-          tools: composer:v2, php-cs-fixer, vimeo/psalm
+          php-version: ${{ matrix.php-version }}
+          tools: composer:v2, php-cs-fixer:${{ matrix.php-cs-fixer }}, vimeo/psalm
 
       - name: Install composer
         run: composer install
