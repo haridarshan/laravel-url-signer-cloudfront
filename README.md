@@ -6,15 +6,54 @@ This a simple wrapper around the official AWS PHP Laravel SDK to generate CloudF
 The package can be installed via Composer:
 
 ```php
-composer require haridarshan/laravel-cloudfront-url-signer
+composer require haridarshan/laravel-url-signer-cloudfront
 ```
 
 # Configuration
-Publish the config (Optional)
+
+## With Laravel
+By default, the package uses the following environment variables to auto-configure the plugin without modification:
+
+```dotenv
+AWS_ACCESS_KEY_ID
+AWS_SECRET_ACCESS_KEY
+AWS_REGION
+```
+To customize the configuration file, publish the package configuration using Artisan.
 
 ```php
-php artisan vendor:publish --provider="Haridarshan\Laravel\CloudFrontUrlSigner\CloudFrontUrlSignerServiceProvider"
+php artisan vendor:publish --provider="Haridarshan\Laravel\UrlSigner\AwsCloudFront\CloudFrontServiceProvider"
 ```
+
+The settings can be found in the generated `config/aws.php` and `config/cloudfront.php` configuration file. By default, the credentials and region settings will pull from your `.env` file.
+
+#### config/aws.php (published by Aws\Laravel\AwsServiceProvider)
+```php
+return [
+    'credentials' => [
+        'key'    => env('AWS_ACCESS_KEY_ID', ''),
+        'secret' => env('AWS_SECRET_ACCESS_KEY', ''),
+    ],
+    'region' => env('AWS_REGION', 'us-east-1'),
+    'version' => 'latest',
+    
+    // You can override settings for specific services
+    'Ses' => [
+        'region' => 'us-east-1',
+    ],
+];
+```
+
+#### config/cloudfront.php
+```php
+return [
+    'default_expiration_time_in_seconds' => 60 * 60 * 24,
+    'private_key_path' => get_base_path(env('CLOUDFRONT_PRIVATE_KEY_PATH', '')),
+    'key_pair_id' => env('CLOUDFRONT_KEY_PAIR_ID', ''),
+];
+```
+
+> **Please Note**: Add `CLOUDFRONT_PRIVATE_KEY_PATH` and `CLOUDFRONT_KEY_PAIR_ID` in `.env` file
 
 # Usage
 
@@ -25,7 +64,7 @@ php artisan vendor:publish --provider="Haridarshan\Laravel\CloudFrontUrlSigner\C
 $url = config('filesystems.disks.s3.url') . '/example.mp4';
 
 // Signed CloudFront URL with 1 day expiry
-echo CloudFrontUrlSignerFacade::signedUrl($url);
+echo \Haridarshan\Laravel\UrlSigner\AwsCloudFront\Facades\CloudFrontFacade::signedUrl($url);
 ```
 
 ### With custom expiry
@@ -34,7 +73,7 @@ $url = config('filesystems.disks.s3.url') . '/example.mp4';
 $expiry = 60 * 60; // Optional in seconds (Default: 1 day)
 
 // Signed CloudFront URL with 1 hour expiry
-echo CloudFrontUrlSignerFacade::signedUrl(
+echo \Haridarshan\Laravel\UrlSigner\AwsCloudFront\Facades\CloudFrontFacade::signedUrl(
     $url,
     $expiry
 );
@@ -58,7 +97,7 @@ $policy = <<<POLICY
 POLICY;
 
 // Signed CloudFront URL with custom policy 
-echo CloudFrontUrlSignerFacade::signedUrl(
+echo \Haridarshan\Laravel\UrlSigner\AwsCloudFront\Facades\CloudFrontFacade::signedUrl(
     $url,
     null,
     $policy
@@ -73,7 +112,7 @@ echo CloudFrontUrlSignerFacade::signedUrl(
 $url = config('filesystems.disks.s3.url') . '/example.mp4';
 
 // CloudFront Signed Cookies with 1 day expiry
-result = CloudFrontUrlSignerFacade::signedCookie($url);
+result = \Haridarshan\Laravel\UrlSigner\AwsCloudFront\Facades\CloudFrontFacade::signedCookie($url);
 
 /* If successful, returns something like:
 CloudFront-Expires = 1589926678
@@ -103,9 +142,40 @@ $policy = <<<POLICY
 POLICY;
 
 // CloudFront Signed Cookies with custom policy 
-$result = CloudFrontUrlSignerFacade::signedUrl(
+$result = \Haridarshan\Laravel\UrlSigner\AwsCloudFront\Facades\CloudFrontFacade::signedUrl(
     null,
     null,
     $policy
 );
+```
+
+## Outside Laravel Application
+
+```php
+require_once "vendor/autoload.php";
+
+$url = "https://example.cloudfront.net/test.mp4";
+
+Dotenv::create(
+    Env::getRepository(),
+    get_base_path(),
+    '.env'
+)->safeLoad();
+
+$cloudfront = new \Haridarshan\Laravel\UrlSigner\CloudFront(
+    (new Sdk([
+        'credentials' => [
+            'key'    => env('AWS_ACCESS_KEY_ID', ''),
+            'secret' => env('AWS_SECRET_ACCESS_KEY', ''),
+        ],
+        'region' => env('AWS_REGION', ''),
+        'version' => 'latest',
+    ]))->createClient('cloudfront'),
+    [
+        'key_pair_id' => env('CLOUDFRONT_KEY_PAIR_ID', ''),
+        'private_key_path' => env('CLOUDFRONT_PRIVATE_KEY_PATH', '')
+    ]
+);
+
+$signedUrl = $cloudfront->signedUrl($url);
 ```
