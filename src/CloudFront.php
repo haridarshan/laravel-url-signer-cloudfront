@@ -11,13 +11,17 @@ class CloudFront
 {
     /**
      * Aws CloudFront Client
-     *
-     * @var AwsClientInterface
      */
     protected AwsClientInterface $client;
 
+    /**
+     * Aws CloudFront Trusted Key Group Private Key Path
+     */
     private string $privateKeyPath;
 
+    /**
+     * Aws CloudFront Key Pair Id
+     */
     private string $keyPairId;
 
     /**
@@ -28,9 +32,6 @@ class CloudFront
      * - options: (array)
      *       - private_key_path: (string) Path of Trusted Key Group Private Key
      *       - key_pair_id: (string) CloudFront Key Pair Id
-     *
-     * @param AwsClientInterface $client
-     * @param array $options
      */
     public function __construct(AwsClientInterface $client, array $options)
     {
@@ -43,7 +44,7 @@ class CloudFront
         }
 
         $this->privateKeyPath = realpath($options['private_key_path']);
-        $this->keyPairId      = $options['key_pair_id'];
+        $this->keyPairId = $options['key_pair_id'];
     }
 
     /**
@@ -59,11 +60,7 @@ class CloudFront
      * - policy: (string) JSON policy. Use this option when creating a signed
      *   URL for a custom policy.
      *
-     * @param string $url
-     * @param DateTimeInterface|int|null $expiry
-     * @param string|null $policy
-     *
-     * @return string
+     * @param  DateTimeInterface|int|null  $expiry
      */
     public function signedUrl(
         string $url,
@@ -71,8 +68,8 @@ class CloudFront
         string $policy = null
     ): string {
         return $this->client->getSignedUrl([
-            'url'         => $url,
-            'expires'     => $this->getTimestamp(
+            'url' => $url,
+            'expires' => $this->getTimestamp(
                 $expiry ?? get_config(
                     'cloudfront.default_expiration_time_in_seconds',
                     60 * 60 * 24
@@ -80,14 +77,12 @@ class CloudFront
             ),
             'private_key' => $this->privateKeyPath,
             'key_pair_id' => $this->keyPairId,
-            'policy'      => $policy
+            'policy' => $policy,
         ]);
     }
 
     /**
-     * @param DateTimeInterface|int $expiry
-     *
-     * @return int
+     * @param  DateTimeInterface|int  $expiry
      */
     protected function getTimestamp($expiry): int
     {
@@ -108,10 +103,6 @@ class CloudFront
 
     /**
      * Check if a timestamp is in the future.
-     *
-     * @param int $timestamp
-     *
-     * @return bool
      */
     protected function isFuture(int $timestamp): bool
     {
@@ -130,11 +121,7 @@ class CloudFront
      * - policy: (string) JSON policy. Use this option when creating a signed
      *   URL for a custom policy.
      *
-     * @param string|null $url
-     * @param DateTimeInterface|int|null $expiry
-     * @param string|null $policy
-     *
-     * @return array
+     * @param  DateTimeInterface|int|null  $expiry
      */
     public function signedCookie(
         string $url = null,
@@ -142,8 +129,8 @@ class CloudFront
         string $policy = null
     ): array {
         return $this->client->getSignedCookie([
-            'url'         => $url,
-            'expires'     => $this->getTimestamp(
+            'url' => $url,
+            'expires' => $this->getTimestamp(
                 $expiry ?? get_config(
                     'cloudfront.default_expiration_time_in_seconds',
                     60 * 60 * 24
@@ -151,14 +138,12 @@ class CloudFront
             ),
             'private_key' => $this->privateKeyPath,
             'key_pair_id' => $this->keyPairId,
-            'policy'      => $policy
+            'policy' => $policy,
         ]);
     }
 
     /**
      * Get AWS CloudFront Client
-     *
-     * @return AwsClientInterface
      */
     public function getClient(): AwsClientInterface
     {

@@ -3,11 +3,11 @@
 namespace Haridarshan\Laravel\UrlSigner\AwsCloudFront\Tests;
 
 use Haridarshan\Laravel\UrlSigner\AwsCloudFront\CloudFront;
+use Haridarshan\Laravel\UrlSigner\AwsCloudFront\CloudFrontServiceProvider;
+use Haridarshan\Laravel\UrlSigner\AwsCloudFront\Facades\CloudFrontFacade;
 use Illuminate\Config\Repository;
 use Illuminate\Container\Container;
 use Illuminate\Foundation\Application;
-use Haridarshan\Laravel\UrlSigner\AwsCloudFront\CloudFrontServiceProvider;
-use Haridarshan\Laravel\UrlSigner\AwsCloudFront\Facades\CloudFrontFacade;
 
 class CloudFrontServiceProviderTest extends BaseTestCase
 {
@@ -131,7 +131,7 @@ class CloudFrontServiceProviderTest extends BaseTestCase
         $app = $this->setupApplication();
         $this->setupServiceProvider($app);
 
-        $policy = <<<POLICY
+        $policy = <<<'POLICY'
 {
   "Statement": [
       {
@@ -193,7 +193,7 @@ POLICY;
         $app = $this->setupApplication();
         $this->setupServiceProvider($app);
 
-        $policy = <<<POLICY
+        $policy = <<<'POLICY'
 {
   "Statement": [
       {
@@ -220,7 +220,7 @@ POLICY;
      */
     protected function setupApplication()
     {
-        if (!class_exists(Application::class)) {
+        if (! class_exists(Application::class)) {
             $this->markTestSkipped();
         }
         // Create the application such that the config is loaded.
@@ -232,8 +232,6 @@ POLICY;
     }
 
     /**
-     * @param Container $app
-     *
      * @return CloudFrontServiceProvider
      */
     private function setupServiceProvider(Container $app)

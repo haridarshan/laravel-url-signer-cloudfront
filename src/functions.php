@@ -6,15 +6,13 @@ if (! function_exists('join_path')) {
     /**
      * Join paths
      *
-     * @param $basePath
-     * @param $path
      *
      * @return string
      */
     function join_path($basePath, $path = '')
     {
-        return $basePath . (
-            $path != '' ? DIRECTORY_SEPARATOR . ltrim($path, DIRECTORY_SEPARATOR) : ''
+        return $basePath.(
+            $path != '' ? DIRECTORY_SEPARATOR.ltrim($path, DIRECTORY_SEPARATOR) : ''
         );
     }
 }
@@ -23,15 +21,15 @@ if (! function_exists('get_base_path')) {
     /**
      * Get App Base Path
      *
-     * @param $path
      *
      * @return string
      */
-    function get_base_path($path = '') {
+    function get_base_path($path = '')
+    {
         if (function_exists('base_path')) {
             return base_path($path);
         } else {
-            return dirname(__DIR__, 4) . ($path != '' ? DIRECTORY_SEPARATOR . ltrim($path, DIRECTORY_SEPARATOR) : '');
+            return dirname(__DIR__, 4).($path != '' ? DIRECTORY_SEPARATOR.ltrim($path, DIRECTORY_SEPARATOR) : '');
         }
     }
 }
@@ -40,8 +38,7 @@ if (! function_exists('get_config_path')) {
     /**
      * Get the configuration path.
      *
-     * @param string $path
-     *
+     * @param  string  $path
      * @return string
      */
     function get_config_path($path = '')
@@ -60,9 +57,8 @@ if (! function_exists('get_config')) {
      *
      * If an array is passed as the key, we will assume you want to set an array of values.
      *
-     * @param array|string|null $key
-     * @param mixed|null $default
-     *
+     * @param  array|string|null  $key
+     * @param  mixed|null  $default
      * @return mixed|ConfigRepository|void
      */
     function get_config($key = null, $default = null)
@@ -75,22 +71,22 @@ if (! function_exists('get_config')) {
             }
 
             if (is_array($key)) {
-                return (new ConfigRepository(require __DIR__ . '/../config/config.php'))->set($key);
+                return (new ConfigRepository(require __DIR__.'/../config/config.php'))->set($key);
             }
 
-            return (new ConfigRepository(require __DIR__ . '/../config/config.php'))->get($key, $default);
+            return (new ConfigRepository(require __DIR__.'/../config/config.php'))->get($key, $default);
         }
     }
 }
 
 if (! function_exists('print_data')) {
     /**
-     * @param mixed $data
+     * @param  mixed  $data
      */
     function print_data(...$data): void
     {
         foreach ($data as $obj) {
-            echo "<pre>";
+            echo '<pre>';
             print_r($obj);
             echo "</pre>\n";
         }

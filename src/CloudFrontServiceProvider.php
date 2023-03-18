@@ -2,8 +2,8 @@
 
 namespace Haridarshan\Laravel\UrlSigner\AwsCloudFront;
 
-use Aws\Laravel\AwsServiceProvider;
 use Aws\Laravel\AwsFacade;
+use Aws\Laravel\AwsServiceProvider;
 use RuntimeException;
 
 class CloudFrontServiceProvider extends AwsServiceProvider
@@ -16,25 +16,25 @@ class CloudFrontServiceProvider extends AwsServiceProvider
     protected $defer = true;
 
     /**
-     * @return void
+     * {@inheritDoc}
      */
     public function boot(): void
     {
         parent::boot();
 
         $this->publishes([
-            __DIR__ . '/../config/config.php' => get_config_path('cloudfront.php'),
+            __DIR__.'/../config/config.php' => get_config_path('cloudfront.php'),
         ], 'cloudfront');
     }
 
     /**
-     * @return void
+     * {@inheritDoc}
      */
     public function register(): void
     {
         parent::register();
 
-        $this->mergeConfigFrom(__DIR__ . '/../config/config.php', 'cloudfront');
+        $this->mergeConfigFrom(__DIR__.'/../config/config.php', 'cloudfront');
 
         $this->app->singleton('cloudfront', function () {
             if (get_config('cloudfront.key_pair_id') === '') {
@@ -56,8 +56,6 @@ class CloudFrontServiceProvider extends AwsServiceProvider
 
     /**
      * Get the services provided by the provider.
-     *
-     * @return array
      */
     public function provides(): array
     {

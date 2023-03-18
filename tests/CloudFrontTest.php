@@ -78,7 +78,7 @@ class CloudFrontTest extends BaseTestCase
     {
         $client = $this->setupClient();
 
-        $policy = <<<POLICY
+        $policy = <<<'POLICY'
 {
   "Statement": [
       {
@@ -137,7 +137,7 @@ POLICY;
     {
         $client = $this->setupClient();
 
-        $policy = <<<POLICY
+        $policy = <<<'POLICY'
 {
   "Statement": [
       {
@@ -166,7 +166,7 @@ POLICY;
     {
         return new CloudFront($this->getAwsClient(), [
             'key_pair_id' => env('CLOUDFRONT_KEY_PAIR_ID'),
-            'private_key_path' => env('CLOUDFRONT_PRIVATE_KEY_PATH')
+            'private_key_path' => env('CLOUDFRONT_PRIVATE_KEY_PATH'),
         ]);
     }
 
@@ -176,8 +176,8 @@ POLICY;
     private function getAwsClient()
     {
         return (new Sdk([
-            'region'  => 'ap-southeast-1',
-            'version' => 'latest'
+            'region' => 'ap-southeast-1',
+            'version' => 'latest',
         ]))->createClient('cloudfront');
     }
 }

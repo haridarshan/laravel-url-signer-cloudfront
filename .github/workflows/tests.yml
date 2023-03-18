@@ -57,7 +57,7 @@ jobs:
         run: composer require laravel/framework:${{ matrix.laravel-versions }}
 
       - name: Run test suite without Laravel
-        run: vendor/bin/phpunit
+        run: vendor/bin/phpunit --verbose
 
       - name: Remove Laravel
         run: rm -rf composer.lock vendor
@@ -66,4 +66,4 @@ jobs:
         run: composer install
 
       - name: Run test suite
-        run: vendor/bin/phpunit
+        run: vendor/bin/phpunit --verbose
