@@ -41,8 +41,7 @@ class CloudFrontServiceProviderTest extends BaseTestCase
 
         // Verify that the client received the credentials from the package config.
         $credentials = $cloudFrontClient->getCredentials()->wait();
-        print_data($credentials);
-        exit();
+
         $this->assertEquals('foo', $credentials->getAccessKeyId());
         $this->assertEquals('bar', $credentials->getSecretKey());
         $this->assertEquals('baz', $cloudFrontClient->getRegion());

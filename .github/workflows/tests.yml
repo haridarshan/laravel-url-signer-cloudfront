@@ -37,9 +37,9 @@ jobs:
 
     name: PHP ${{ matrix.php-versions }} with Laravel ${{ matrix.laravel-versions }}
     env:
-      AWS_ACCESS_KEY_ID: test
-      AWS_SECRET_ACCESS_KEY: test
-      AWS_REGION: ap-southeast-1
+      AWS_ACCESS_KEY_ID: foo
+      AWS_SECRET_ACCESS_KEY: bar
+      AWS_REGION: baz
       CLOUDFRONT_PRIVATE_KEY_PATH: tests/test-key.pem
       CLOUDFRONT_KEY_PAIR_ID: testKeyPairId
     steps:
