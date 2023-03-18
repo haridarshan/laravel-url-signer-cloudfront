@@ -12,17 +12,17 @@ jobs:
       matrix:
         include:
           - php-version: '7.2'
-            php-cs-fixer: '^3.2'
+            php-cs-fixer: '3.2'
           - php-version: '7.3'
-            php-cs-fixer: '^3.2'
+            php-cs-fixer: '3.2'
           - php-version: '7.4'
-            php-cs-fixer: '^3.5'
+            php-cs-fixer: '3.5'
           - php-version: '8.0'
-            php-cs-fixer: '^3.5'
+            php-cs-fixer: '3.5'
           - php-version: '8.1'
-            php-cs-fixer: '^3.5'
+            php-cs-fixer: '3.5'
           - php-version: '8.2'
-            php-cs-fixer: '^3.5'
+            php-cs-fixer: '3.5'
 
     name: PHP ${{ matrix.php-version }}
     steps:
