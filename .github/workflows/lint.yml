@@ -13,16 +13,22 @@ jobs:
         include:
           - php-version: '7.2'
             php-cs-fixer: '3.2'
+            psalm: '4.0'
           - php-version: '7.3'
             php-cs-fixer: '3.2'
+            psalm: '4.0'
           - php-version: '7.4'
             php-cs-fixer: '3.5'
+            psalm: '5.0'
           - php-version: '8.0'
             php-cs-fixer: '3.5'
+            psalm: '5.0'
           - php-version: '8.1'
             php-cs-fixer: '3.5'
+            psalm: '5.0'
           - php-version: '8.2'
             php-cs-fixer: '3.5'
+            psalm: '5.0'
 
     name: PHP ${{ matrix.php-version }}
     steps:
@@ -36,7 +42,9 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-version }}
-          tools: composer:v2, php-cs-fixer:${{ matrix.php-cs-fixer }}, vimeo/psalm
+          tools: composer:v2, php-cs-fixer:${{ matrix.php-cs-fixer }}, vimeo/psalm:${{ matrix.psalm }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install composer
         run: composer install
