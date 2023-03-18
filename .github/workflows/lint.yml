@@ -31,13 +31,13 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-versions }}
-          # tools: php-cs-fixer, vimeo/psalm
+          tools: composer:v2, php-cs-fixer, vimeo/psalm
 
       - name: Install composer
         run: composer install
 
       - name: Check Php code style
-        run: ./vendor/bin/php-cs-fixer fix
+        run: php-cs-fixer fix
 
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
@@ -50,4 +50,4 @@ jobs:
           commit_user_email: ${{ steps.import-gpg.outputs.email }}
 
       - name: Run Psalm Static Analysis
-        run: ./vendor/bin/psalm --output-format=github
+        run: psalm --output-format=github
