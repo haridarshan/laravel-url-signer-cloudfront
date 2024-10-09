@@ -39,7 +39,7 @@ jobs:
       - name: Check Php code style
         run: php-cs-fixer fix
 
-      - uses: stefanzweifel/git-auto-commit-action@v4
+      - uses: stefanzweifel/git-auto-commit-action@v5
         with:
           push_options: '--force'
           file_pattern: '*.php'
