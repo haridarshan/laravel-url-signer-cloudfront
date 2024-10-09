@@ -34,8 +34,16 @@ jobs:
             laravel-versions: '^10.0'
           - php-versions: '8.2'
             laravel-versions: '^9.0'
+          - php-versions: '8.3'
+            laravel-versions: '^9.0'
           - php-versions: '8.2'
             laravel-versions: '^10.0'
+          - php-versions: '8.3'
+            laravel-versions: '^10.0'
+          - php-versions: '8.2'
+            laravel-versions: '^11.0'
+          - php-versions: '8.3'
+            laravel-versions: '^11.0'
 
     name: PHP ${{ matrix.php-versions }} with Laravel ${{ matrix.laravel-versions }}
     env:
