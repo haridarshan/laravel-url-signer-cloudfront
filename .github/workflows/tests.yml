@@ -59,7 +59,7 @@ jobs:
           php-version: ${{ matrix.php-versions }}
 
       - name: Checkout codebase
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Require laravel
         run: composer require laravel/framework:${{ matrix.laravel-versions }}
